@@ -1,0 +1,6 @@
+confs/
+data/train/
+*.ipynb_checkpoints
+*.vscode
+__pychache__
+pretrained_models.pytorch
