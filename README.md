@@ -12,6 +12,9 @@ HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh
 ### Requirements  
   - apex  
   - efficientnet-pytorch  
+```bash
+$ pip install -r requirements.txt
+```
 ### Donwnload  
   - Download the preprocessing dataset with 3 x 256 x 256 size
 ```
