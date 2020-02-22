@@ -15,6 +15,9 @@ HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh
 ### Donwnload  
 ```
 데이터셋 다운로드 받기
+$ cd data/bengaliai/train
+$ wget original.tar 다운
+$ tar -xvf original.tar
 ```  
 
 ## Run  
