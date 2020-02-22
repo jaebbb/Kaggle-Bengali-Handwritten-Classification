@@ -26,11 +26,11 @@ $ sh run.sh
 
 ##  Results  
 
-|   | Model            |Augmentation      | learning_rate    | lr_scheduler     | amp opt_level |esemble  | Accuracy |
-|:--:|:----------------:|:----------------:|:----------------:|:----------------:|:-------------:|:--------:|:-------:|
-|**1**|  efficientnet-b5 |  Rotate, Normalize | 0.01           | OneCycleLR       | O1      |None        |  0.9736  |
-|**2**|  efficientnet-b5 |  Gridmask (1), Normalize| 0.01  | OneCycleLR           | O1      |None        |  0.9815  |
-|**3**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01  | OneCycleLR           | O1      |None        |  0.9831  |
-|**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005 | OneCycleLR           | O1      |None        |  0.9839  |
-|**5**|  efficientnet-b5 |  None            | 0.01             | OneCycleLR       | O1      |3+4      |  0.9841    |
+|   | Model            |Augmentation      | learning_rate       | amp opt_level |esemble  | Accuracy |
+|:--:|:----------------:|:----------------:|:----------------:|:-------------:|:--------:|:-------:|
+|**1**|  efficientnet-b5 |  Rotate, Normalize | 0.01                | O1      |None        |  0.9736  |
+|**2**|  efficientnet-b5 |  Gridmask (1), Normalize| 0.01         | O1      |None        |  0.9815  |
+|**3**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01       | O1      |None        |  0.9831  |
+|**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O1      |None        |  0.9839  |
+|**5**|  efficientnet-b5 |  Gridmask (3), Normalize            | 0.005          | O1      |3+4      |  <span style="color:red">0.9841</span>    |
 
