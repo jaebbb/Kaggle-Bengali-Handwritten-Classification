@@ -5,9 +5,6 @@ Kaggle Competetion (Dec 20, 2019  ~ Mar 17,2020)
 Top 3% Result (33/1536)  
 https://www.kaggle.com/c/bengaliai-cv19  
 
-# Main Contributors  
-HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
-
 # Install  
 ### Requirements  
   - apex  
@@ -39,6 +36,8 @@ $ sh run.sh
 |**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O1      |None        |  0.9839  |
 |**5**|  efficientnet-b5 |  Gridmask (3), Normalize            | 0.005          | O1      |3+4      | **0.9841**   |  
 
+# Main Contributors  
+HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
 
 # Reference  
 [1] Efficientnet : https://github.com/lukemelas/EfficientNet-PyTorch.git  
