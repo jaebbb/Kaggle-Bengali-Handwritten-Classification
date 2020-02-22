@@ -5,10 +5,10 @@ Kaggle Competetion (Dec 20, 2019  ~ Mar 17,2020)
 Top 3% Result (33/1536)  
 https://www.kaggle.com/c/bengaliai-cv19  
 
-## Main Contributers  
+# Main Contributers  
 HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
 
-## Install  
+# Install  
 ### Requirements  
   - apex  
   - efficientnet-pytorch  
@@ -22,14 +22,14 @@ $ cd data/bengaliai/train
 $ sh download.sh
 ```  
 
-## Run  
+# Run  
 ```bash
 $ sh run.sh
 ```  
 
 
 
-##  Results  
+#  Results  
 
 |   | Model            |Augmentation      | learning_rate       | amp opt_level |esemble  | Accuracy |
 |:--:|:----------------:|:----------------:|:----------------:|:-------------:|:--------:|:-------:|
@@ -40,6 +40,6 @@ $ sh run.sh
 |**5**|  efficientnet-b5 |  Gridmask (3), Normalize            | 0.005          | O1      |3+4      | **0.9841**   |  
 
 
-## Reference  
+# Reference  
 [1] Efficientnet : https://github.com/lukemelas/EfficientNet-PyTorch.git  
 
