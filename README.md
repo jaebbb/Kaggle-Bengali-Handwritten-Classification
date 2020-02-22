@@ -13,11 +13,10 @@ HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh
   - apex  
   - efficientnet-pytorch  
 ### Donwnload  
+  - Download the preprocessing dataset with 3 x 256 x 256 size
 ```
-데이터셋 다운로드 받기
 $ cd data/bengaliai/train
-$ wget original.tar 다운
-$ tar -xvf original.tar
+$ sh download.sh
 ```  
 
 ## Run  
