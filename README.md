@@ -5,7 +5,7 @@ Kaggle Competetion (Dec 20, 2019  ~ Mar 17,2020)
 Top 3% Result (33/1536)  
 https://www.kaggle.com/c/bengaliai-cv19  
 
-# Main Contributers  
+# Main Contributors  
 HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
 
 # Install  
