@@ -4,3 +4,8 @@ data/train/
 *.vscode
 __pychache__
 pretrained_models.pytorch
+*.parquet
+256/
+pre256/
+*.zip
+*.tar
