@@ -42,18 +42,22 @@ class BengaliImageDataset(Dataset):
         #print(img)
 
 #        image = Image.open(image_name)
-        image = Image.fromarray(img)
-        image = image.convert('RGB')
+       # image = Image.fromarray(img)
+        #image = image.convert('RGB')
 
 #        print(image.getpixel((0,0)))
 
 
-        if self.transform:
-            image = self.transform(image)
+     #   if self.transform:
+      #      image = self.transform(image)
 #            img = transformed['image']
-
+        if self.transform is not None:
+            res = self.transform(image=img)
+            image = res['image']
         #print(image[0,0,0])
-
+        image = image.unsqueeze(0)
+        image = image.repeat(3, 1, 1)
+ 
         values, idx_graph = torch.max(torch.tensor(self.data_dummie_labels.iloc[idx, 0:168]), 0)
         values, idx_vowel = torch.max(torch.tensor(self.data_dummie_labels.iloc[idx, 168:179]), 0)
         values, idx_conso = torch.max(torch.tensor(self.data_dummie_labels.iloc[idx, 179:186]), 0)
