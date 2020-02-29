@@ -6,11 +6,12 @@ from __future__ import print_function, division, absolute_import
 from collections import OrderedDict
 import math
 
+import torch
 import torch.nn as nn
 from torch.utils import model_zoo
 
 __all__ = ['SENet', 'senet154', 'se_resnet50', 'se_resnet101', 'se_resnet152',
-           'se_resnext50_32x4d', 'se_resnext101_32x4d']
+           'se_resnext50_32x4d', 'se_resnext50_32x4d_init', 'se_resnext101_32x4d']
 
 pretrained_settings = {
     'senet154': {
@@ -108,6 +109,7 @@ class Bottleneck(nn.Module):
     """
     Base class for bottlenecks that implements `forward()` method.
     """
+
     def forward(self, x):
         residual = x
 
@@ -378,6 +380,18 @@ def initialize_pretrained_model(model, num_classes, settings):
     model.std = settings['std']
 
 
+def weights_init(m):
+    if isinstance(m, nn.Conv2d):
+        torch.nn.init.kaiming_normal_(
+            m.weight, mode='fan_out', nonlinearity='relu')
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
+    elif isinstance(m, nn.BatchNorm2d):
+        nn.init.constant_(m.weight, 1)
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
+
+
 def senet154(num_classes=1000, pretrained='imagenet'):
     model = SENet(SEBottleneck, [3, 8, 36, 3], groups=64, reduction=16,
                   dropout_p=0.2, num_classes=num_classes)
@@ -422,12 +436,26 @@ def se_resnet152(num_classes=1000, pretrained='imagenet'):
 
 def se_resnext50_32x4d(num_classes=1000, pretrained='imagenet'):
     model = SENet(SEResNeXtBottleneck, [3, 4, 6, 3], groups=32, reduction=16,
-                  dropout_p=0.2, inplanes=64, input_3x3=False,
+                  dropout_p=0.3, inplanes=64, input_3x3=False,
                   downsample_kernel_size=1, downsample_padding=0,
                   num_classes=num_classes)
     if pretrained is not None:
         settings = pretrained_settings['se_resnext50_32x4d'][pretrained]
         initialize_pretrained_model(model, num_classes, settings)
+    return model
+
+
+def se_resnext50_32x4d_init(num_classes=1000, pretrained='imagenet'):
+    model = SENet(SEResNeXtBottleneck, [3, 4, 6, 3], groups=32, reduction=16,
+                  dropout_p=0.3, inplanes=64, input_3x3=False,
+                  downsample_kernel_size=1, downsample_padding=0,
+                  num_classes=num_classes)
+    if pretrained is not None:
+        settings = pretrained_settings['se_resnext50_32x4d'][pretrained]
+        initialize_pretrained_model(model, num_classes, settings)
+    # model.layer2.apply(weights_init)
+    model.layer3.apply(weights_init)
+    model.layer4.apply(weights_init)
     return model
 
 

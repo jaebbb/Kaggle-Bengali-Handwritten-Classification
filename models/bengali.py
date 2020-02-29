@@ -5,6 +5,7 @@ import torch.nn.functional as F
 
 from efficientnet_pytorch import EfficientNet
 from models.senet import *
+from models.ghost_net import ghost_net
 
 #from Mish import Mish
 
@@ -118,9 +119,12 @@ class BengaliEfficientNet(torch.nn.Module):
 
 class BengaliSeNet(torch.nn.Module):
 
-    def __init__(self, pretrain=True):
+    def __init__(self, init=True):
         super().__init__()
-        self.backbone = se_resnext101_32x4d()
+        if init:
+            self.backbone = se_resnext50_32x4d_init()
+        else:
+            self.backbone = se_resnext101_32x4d()
         #self.backbone.load_state_dict(torch.load(state_dict))
         in_features = self.backbone.last_linear.in_features
         print('in_features:', in_features)
@@ -200,3 +204,98 @@ class BengaliSeNet(torch.nn.Module):
         fc_conso = self.fc_conso3(x3)
 
         return fc_graph, fc_vowel, fc_conso
+
+    
+    
+    
+    
+    
+class BengaliGhostNet(torch.nn.Module):
+
+    def __init__(self, pretrain=True):
+        super().__init__()
+        self.backbone = ghost_net(width_mult=1.0)
+
+        in_features = 160
+        
+        self.avg_pool = nn.AvgPool2d((7,7), stride=None, padding=0, ceil_mode=False, count_include_pad=True, divisor_override=None)
+        self.bn1_1 = nn.BatchNorm1d(num_features=in_features)
+        self.bn1_2 = nn.BatchNorm1d(num_features=in_features)
+        self.bn1_3 = nn.BatchNorm1d(num_features=in_features)
+
+        self.bn2_1 = nn.BatchNorm1d(num_features=160)
+        self.bn2_2 = nn.BatchNorm1d(num_features=160)
+        self.bn2_3 = nn.BatchNorm1d(num_features=160)
+
+        self.bn3_1 = nn.BatchNorm1d(num_features=160)
+        self.bn3_2 = nn.BatchNorm1d(num_features=160)
+        self.bn3_3 = nn.BatchNorm1d(num_features=160)
+
+        self.fc_graph1 = torch.nn.Linear(in_features, 160)
+        self.fc_vowel1 = torch.nn.Linear(in_features, 160)
+        self.fc_conso1 = torch.nn.Linear(in_features, 160)
+
+        self.fc_graph2 = torch.nn.Linear(160, 160)
+        self.fc_vowel2 = torch.nn.Linear(160, 160)
+        self.fc_conso2 = torch.nn.Linear(160, 160)
+
+        self.fc_graph3 = torch.nn.Linear(160, 168)
+        self.fc_vowel3 = torch.nn.Linear(160, 11)
+        self.fc_conso3 = torch.nn.Linear(160, 7)
+
+
+        # self._init_weights()
+
+    def forward(self, inputs):      
+
+        """ Calls extract_features to extract features, applies final linear layer, and returns logits. """
+        bs = inputs.size(0)
+        # Convolution layers
+        x = self.backbone.features(inputs)
+
+        # Pooling and final linear layer
+        x = self.avg_pool(x)
+    
+        x = x.view(bs, -1)
+
+
+
+
+        x1 = self.bn1_1(x)
+        x2 = self.bn1_2(x)
+        x3 = self.bn1_3(x)
+
+        x1 = F.relu(x1)
+        x2 = F.relu(x2)
+        x3 = F.relu(x3)
+
+        x1 = self.fc_graph1(x1)
+        x2 = self.fc_vowel1(x2)
+        x3 = self.fc_conso1(x3)
+
+        x1 = self.bn2_1(x1)
+        x2 = self.bn2_2(x2)
+        x3 = self.bn2_3(x3)
+
+        x1 = F.relu(x1)
+        x2 = F.relu(x2)
+        x3 = F.relu(x3)
+
+        x1 = self.fc_graph2(x1)
+        x2 = self.fc_vowel2(x2)
+        x3 = self.fc_conso2(x3)
+
+        x1 = self.bn3_1(x1)
+        x2 = self.bn3_2(x2)
+        x3 = self.bn3_3(x3)
+
+        x1 = F.relu(x1)
+        x2 = F.relu(x2)
+        x3 = F.relu(x3)
+
+        fc_graph = self.fc_graph3(x1)
+        fc_vowel = self.fc_vowel3(x2)
+        fc_conso = self.fc_conso3(x3)
+
+        return fc_graph, fc_vowel, fc_conso
+
