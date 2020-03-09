@@ -454,7 +454,7 @@ def se_resnext50_32x4d_init(num_classes=1000, pretrained='imagenet'):
         settings = pretrained_settings['se_resnext50_32x4d'][pretrained]
         initialize_pretrained_model(model, num_classes, settings)
     # model.layer2.apply(weights_init)
-    model.layer3.apply(weights_init)
+    # model.layer3.apply(weights_init)
     model.layer4.apply(weights_init)
     return model
 
@@ -467,4 +467,18 @@ def se_resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['se_resnext101_32x4d'][pretrained]
         initialize_pretrained_model(model, num_classes, settings)
+    return model
+
+
+def se_resnext101_32x4d_init(num_classes=1000, pretrained='imagenet'):
+    model = SENet(SEResNeXtBottleneck, [3, 4, 23, 3], groups=32, reduction=16,
+                  dropout_p=None, inplanes=64, input_3x3=False,
+                  downsample_kernel_size=1, downsample_padding=0,
+                  num_classes=num_classes)
+    if pretrained is not None:
+        settings = pretrained_settings['se_resnext101_32x4d'][pretrained]
+        initialize_pretrained_model(model, num_classes, settings)
+    # model.layer2.apply(weights_init)
+    # model.layer3.apply(weights_init)
+    model.layer4.apply(weights_init)
     return model

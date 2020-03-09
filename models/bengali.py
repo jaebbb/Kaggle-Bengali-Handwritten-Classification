@@ -4,18 +4,22 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from efficientnet_pytorch import EfficientNet
-from models.senet import *
+from models.senet import se_resnext101_32x4d_init
 from models.ghost_net import ghost_net
+
 
 #from Mish import Mish
 
 class BengaliEfficientNet(torch.nn.Module):
 
-    def __init__(self, pretrain=True):
+    def __init__(self, pretrain=True, weight_init = True):
         super().__init__()
         self.backbone = None
         if pretrain:
             self.backbone = EfficientNet.from_pretrained('efficientnet-b5',advprop=True)
+            if weight_init:
+              #  self.backbone._blocks.apply(self.weights_init)
+                self.backbone._conv_head.apply(self.weights_init)
         else:
             self.backbone = EfficientNet.from_name('efficientnet-b5')
         #self.backbone.load_state_dict(torch.load(state_dict))
@@ -65,6 +69,20 @@ class BengaliEfficientNet(torch.nn.Module):
         x = self.backbone._swish(self.backbone._bn1(self.backbone._conv_head(x)))
 
         return x
+    
+    
+    def weights_init(self, m):
+        if isinstance(m, nn.Conv2d):
+            torch.nn.init.kaiming_normal_(
+                m.weight, mode='fan_out', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.BatchNorm2d):
+            nn.init.constant_(m.weight, 1)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+
+
 
     def forward(self, inputs):      
 
@@ -122,11 +140,12 @@ class BengaliSeNet(torch.nn.Module):
     def __init__(self, init=True):
         super().__init__()
         if init:
-            self.backbone = se_resnext50_32x4d_init()
+            self.backbone = se_resnext101_32x4d_init()
         else:
             self.backbone = se_resnext101_32x4d()
         #self.backbone.load_state_dict(torch.load(state_dict))
         in_features = self.backbone.last_linear.in_features
+        in_features = 8192
         print('in_features:', in_features)
         self.bn1_1 = nn.BatchNorm1d(num_features=in_features)
         self.bn1_2 = nn.BatchNorm1d(num_features=in_features)

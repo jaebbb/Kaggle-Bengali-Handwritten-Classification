@@ -41,11 +41,11 @@ INPUT_PATH = os.path.join(CUR_DIR, 'data', 'bengaliai')
 INPUT_PATH_TRAIN_IMAGES = os.path.join(CUR_DIR, 'data', 'bengaliai', 'train', '256')
 
 parser = argparse.ArgumentParser(description='PyTorch Bengaliai Training')
-parser.add_argument('--lr', default=0.01, type=float, help='learning rate')
+parser.add_argument('--lr', default=0.05, type=float, help='learning rate')
 parser.add_argument('--model', type = str, default ='Efficientnet', help='Efficientnet or Resnext101_32x4d or GhostNet')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
-parser.add_argument('--batch-train', type=int, default=256, help='batch size for train set')
-parser.add_argument('--batch-test', type=int, default=256, help='batch size for test set')
+parser.add_argument('--batch-train', type=int, default=50, help='batch size for train set')
+parser.add_argument('--batch-test', type=int, default=50, help='batch size for test set')
 parser.add_argument('--amp',  action='store_true', help='train with amp')
 parser.add_argument('--scheduler',  action='store_true', help='train with scheduler')
 args = parser.parse_args()
@@ -57,9 +57,9 @@ start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 # Data
 print('==> Preparing data..')
 transform_train = albumentations.Compose([
-   # Resize(128,128),
+	# Rotate(limit=10),
+    #    Resize(224, 224),
 	ShiftScaleRotate(rotate_limit=15),
-    Cutout(num_holes=8, max_h_size=20, max_w_size=20, p=1.0),
 	albumentations.OneOf([
         GridMask(num_grid=3, rotate=15),
         GridMask(num_grid=(3,7)),
@@ -69,14 +69,15 @@ transform_train = albumentations.Compose([
 ])
 
 
+
 transform_test = albumentations.Compose([
-#    Resize(128,128),
-	ToTensor()
+#    Resize(224, 224),
+   	ToTensor()
 ])
 
 
 train_dataset = BengaliImageDataset(
-    csv_file=INPUT_PATH + '/train_1.csv',
+    csv_file=INPUT_PATH + '/train.csv',
     path=INPUT_PATH_TRAIN_IMAGES,
     transform=transform_train, labels=True
 )
@@ -90,19 +91,19 @@ trainloader = torch.utils.data.DataLoader(
 )
 
 test_dataset = BengaliImageDataset(
-    csv_file=INPUT_PATH + '/val_1.csv',
-    path=INPUT_PATH_TRAIN_IMAGES,
-    transform=transform_test, labels=True
-)
+     csv_file=INPUT_PATH + '/val_1.csv',
+     path=INPUT_PATH_TRAIN_IMAGES,
+     transform=transform_test, labels=True
+ )
 
 
 
 testloader = torch.utils.data.DataLoader(
-    test_dataset,
-    batch_size=args.batch_test,
-    num_workers=4,
-    shuffle=False
-)
+     test_dataset,
+     batch_size=args.batch_test,
+     num_workers=2,
+     shuffle=False
+ )
 
 # image 확인용 저장.
 print(train_dataset[0]['image'].shape)
@@ -112,7 +113,7 @@ print(train_dataset[0]['image'].shape)
 print('==> Building model..')
 
 if args.model == 'Efficientnet':
-    net = BengaliEfficientNet(pretrain=True)
+    net = BengaliEfficientNet(pretrain=True, weight_init=True)
 elif args.model == 'Resnext101_32x4d':
     net = BengaliSeNet()
 elif args.model == 'GhostNet':
@@ -128,13 +129,16 @@ if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
     assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/20200111_165324.255004/bengali_99.pth')
+    checkp = './checkpoint/20200228_140532.380954/bengali_149.pth'
+    checkpoint = torch.load(checkp)
     net.load_state_dict(checkpoint)
     best_acc = 0 #checkpoint['acc']
     start_epoch = int(checkp[-6:-4])+1 #checkpoint['epoch']
+    
+    
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4, nesterov=True)
+optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=3e-4, nesterov=True)
 
 if args.amp:
     print('==> Operate amp')
@@ -143,15 +147,18 @@ if args.amp:
 if args.scheduler:
     print('==> Operate scheduler')
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.9, patience=1, min_lr=1e-10, verbose=True)
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, 1e-2, total_steps=None, epochs = 100, steps_per_epoch=len(trainloader), pct_start=0.0,
-    anneal_strategy='cos', cycle_momentum=True,base_momentum=0.85, max_momentum=0.95,  div_factor=100.0) ## Scheduler . Step for each batch
+    #scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[40,85], gamma=0.1)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, 1e-2, total_steps=None, epochs = 200, steps_per_epoch=len(trainloader), pct_start=0.0,
+            anneal_strategy='cos', cycle_momentum=True,base_momentum=0.85, max_momentum=0.95,  div_factor=100.0) ## Scheduler . Step for each batch
+    
 
+    
     
     
 # # logger
 here = os.getcwd()
 now = datetime.datetime.now()
-args.out = now.strftime('%Y%m%d_%H%M%S.%f')
+args.out = now.strftime('%m%d%H%M_')+args.model
 log_dir = osp.join(here, 'logs', args.out)
 os.makedirs(log_dir)
 logger = CustomLogger(out=log_dir)
@@ -163,7 +170,7 @@ os.makedirs(check_dir)
 # for .yaml
 args.dataset = ['256 original + gridmask']
 args.optimizer = 'sgd'
-args.model = '%s & weight_decay=5e-4 & batch=%d, steps_per_epoch=%d' %(args.model, args.batch_train, len(trainloader))
+args.model = '%s & weight_decay=3e-4 & batch=%d, steps_per_epoch=%d' %(args.model, args.batch_train, len(trainloader))
 args.scheduler = 'OneCycleLR'
 
 with open(osp.join(log_dir, 'config.yaml'), 'w') as f:
@@ -173,6 +180,7 @@ with open(osp.join(log_dir, 'config.yaml'), 'w') as f:
 # Training
 def train(epoch):
     print('\nEpoch: %d' % epoch)
+
     net.train()
     train_loss = 0
     correct_graph = 0
@@ -316,7 +324,7 @@ def get_learing_rate(optimizer):
 #             param_group['lr'] = lr 
 #         print('LR is set to {}'.format(lr))
 
-for epoch in range(start_epoch, start_epoch+150):
+for epoch in range(start_epoch, start_epoch+200):
 #    test(epoch)
 #    adjust_learning_rate(optimizer, epoch, args)
     train(epoch)
