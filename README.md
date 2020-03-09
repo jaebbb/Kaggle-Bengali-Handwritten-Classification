@@ -35,15 +35,18 @@ $ sh run.sh
 |   | Model            |Augmentation      | learning_rate       | amp opt_level |esemble  | Accuracy |
 |:--:|:----------------:|:----------------:|:----------------:|:-------------:|:--------:|:-------:|
 |**1**|  efficientnet-b5 |  Rotate, Normalize | 0.01                | O1      |None        |  0.9736  |
-|**2**|  efficientnet-b5 |  Gridmask (1), Normalize| 0.01         | O1      |None        |  0.9815  |
-|**3**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01       | O1      |None        |  0.9831  |
-|**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O1      |None        |  0.9839  |
-|**5**|  efficientnet-b5 |  Gridmask (3), Normalize            | 0.005          | O1      |3+4      | **0.9841**   |  
-
+|**2**|  ghostnet |  Gridmask(3), Normalize | 0.01                | O1      |None        |  0.9741  |
+|**3**|  efficientnet-b5 |  Gridmask (1), Normalize| 0.01         | O1      |None        |  0.9815  |
+|**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01       | O1      |None        |  0.9831  |
+|**5**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O0      |None        |  0.9839  |
+|**6**|  se_resnext101_32x4 |  Gridmask (3), Normalize | 0.01                | O0      |None        |  0.9841  |
+|**7**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | 0.01  | O0  |None        |  **0.9857**  |
 
 # Main Contributors  
 HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
 
 # Reference  
 [1] Efficientnet : https://github.com/lukemelas/EfficientNet-PyTorch.git  
+[2] se_resnext101_32x4d : https://github.com/Cadene/pretrained-models.pytorch  
+[3] Ghostnet : https://github.com/huawei-noah/ghostnet  
 
