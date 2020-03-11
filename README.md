@@ -40,10 +40,12 @@ $ sh run.sh
 |**4**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01       | O1      |None        |  0.9831  |
 |**5**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O0      |None        |  0.9839  |
 |**6**|  se_resnext101_32x4 |  Gridmask (3), Normalize | 0.01                | O0      |None        |  0.9841  |
-|**7**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | 0.01  | O0  |None        |  **0.9857**  |
+|**7**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | 0.01  | O0  |None        |  0.9857  |
+|**8**|  1 eff + 2 seresnext |  Gridmask (3), Normalize | 0.01  | O0  |True        |  **0.9867**  |
+
 
 # Main Contributors  
-HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi, Yoonju Oh  
+HeeChul Jung, Chaehyeon Lee, Jaehyeop Choi  
 
 # Reference  
 [1] Efficientnet : https://github.com/lukemelas/EfficientNet-PyTorch.git  
