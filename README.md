@@ -1,6 +1,6 @@
 # Bengali.AI Handwritten Grapheme Classification  
 **Kaggle Competition (Dec 20, 2019  ~ Mar 17,2020)**  
-**Top 4% Result (64/2063)**  
+**Top 4% Result (64th/2063)**  
 # Introduction  
 For this competition, you’re given the image of a handwritten Bengali grapheme and are challenged to separately classify three constituent elements in the image: grapheme root, vowel diacritics, and consonant diacritics.  
 By participating in the competition, you’ll hopefully accelerate Bengali handwritten optical character recognition research and help enable the digitalization of educational resources. Moreover, the methods introduced in the competition will also empower cousin languages in the Indian subcontinent.  
