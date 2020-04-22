@@ -32,17 +32,17 @@ $ sh run.sh
 
 #  Results  
 
-|   | Model            |Augmentation      | learning_rate       | amp opt_level |esemble  | Accuracy(PB) |
+|   | Model            |Augmentation      | elapsed time(sec) per 1 epoch | amp opt_level |esemble  | Accuracy(PB) |
 |:--:|:----------------:|:----------------:|:----------------:|:-------------:|:--------:|:-------:|
-|**1**|  efficientnet-b0 |  Rotate, Normalize | 0.01                | O1      |None        |  0.9699  |
-|**2**|  efficientnet-b5 |  Rotate, Normalize | 0.01                | O1      |None        |  0.9736  |
-|**3**|  ghostnet |  Gridmask(3), Normalize | 0.01                | O1      |None        |  0.9741  |
-|**4**|  efficientnet-b5 |  Gridmask (1), Normalize| 0.01         | O1      |None        |  0.9815  |
-|**5**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.01       | O1      |None        |  0.9831  |
-|**6**|  efficientnet-b5 |  Gridmask (3), Normalize| 0.005    | O0      |None        |  0.9839  |
-|**7**|  se_resnext101_32x4 |  Gridmask (3), Normalize | 0.01                | O0      |None        |  0.9841  |
-|**8**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | 0.01  | O0  |None        |  0.9857  |
-|**9**|  1 efficientnet + 2 se_resnext101_32x4 |  Gridmask (3), Normalize | 0.01  | O0  |True        |  **0.9867**  |
+|**1**|  efficientnet-b0 |  Rotate, Normalize | 1041               | O1      |None        |  0.9699  |
+|**2**|  efficientnet-b5 |  Rotate, Normalize | 2696                | O1      |None        |  0.9736  |
+|**3**|  ghostnet |  Gridmask(3), Normalize | 1985                | O1      |None        |  0.9741  |
+|**4**|  efficientnet-b5 |  Gridmask (1), Normalize| 3319         | O1      |None        |  0.9815  |
+|**5**|  efficientnet-b5 |  Gridmask (3), Normalize| 3614       | O1      |None        |  0.9831  |
+|**6**|  efficientnet-b5 |  Gridmask (3), Normalize| 3601    | O0      |None        |  0.9839  |
+|**7**|  se_resnext101_32x4 |  Gridmask (3), Normalize | 2679                | O0      |None        |  0.9841  |
+|**8**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | 2705  | O0  |None        |  0.9857  |
+|**9**|  1 efficientnet + 2 se_resnext101_32x4 |  Gridmask (3), Normalize | X  | O0  |True        |  **0.9867**  |
 
 
 # Main Contributors  
