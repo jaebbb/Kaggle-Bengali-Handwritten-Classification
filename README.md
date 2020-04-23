@@ -38,8 +38,8 @@ $ sh run.sh
 |**2**|  efficientnet-b5 |  Rotate, Normalize | O1      |None        | 2696                |  0.9736  |
 |**3**|  ghostnet |  Gridmask(3), Normalize |  O1      |None        | 1985                | 0.9741  |
 |**4**|  efficientnet-b5 |  Gridmask (1), Normalize| O1      |None        | 3319         |  0.9815  |
-|**5**|  efficientnet-b5 |  Gridmask (3), Normalize| O1      |None        | 3614       |  0.9831  |
-|**6**|  efficientnet-b5 |  Gridmask (3), Normalize| O0      |None        | 3601    |  0.9839  |
+|**5**|  efficientnet-b5 |  Gridmask (3), Normalize| O1      |None        | 3588       |  0.9831  |
+|**6**|  efficientnet-b5 |  Gridmask (3), Normalize| O0      |None        | 3633    |  0.9839  |
 |**7**|  se_resnext101_32x4 |  Gridmask (3), Normalize |  O0      |None        | 2679                | 0.9841  |
 |**8**|  se_resnext101_32x4(layer4 weight init) |  Gridmask (3), Normalize | O0  |None        |  2705  | 0.9857  |
 |**9**|  1 efficientnet + 2 se_resnext101_32x4 |  Gridmask (3), Normalize | O0  |True        | X  |  **0.9867**  |
