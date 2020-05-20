@@ -42,7 +42,7 @@ $ sh run.sh
 |**6**|  EfficientNet-b5 |  Gridmask (3), Normalize| O0      |None        | 3633    |  0.9839  |
 |**7**|  SE_ResNeXt-50 |  Gridmask (3), Normalize |  O0      |None        | 2679                | 0.9841  |
 |**8**|  SE_ResNeXt-50(layer4 weight init) |  Gridmask (3), Normalize | O0  |None        |  2705  | 0.9857  |
-|**9**|  1 EfficientNet + 2 SE_ResNeXt-50 |  Gridmask (3), Normalize | O0  |True        | X  |  **0.9867**  |
+|**9**|  1 EfficientNet-b5 + 2 SE_ResNeXt-50 |  Gridmask (3), Normalize | O0  |True        | X  |  **0.9867**  |
 
 
 # Main Contributors  
